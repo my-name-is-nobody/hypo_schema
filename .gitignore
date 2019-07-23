@@ -4,3 +4,7 @@ venv
 *.pyc
 build
 dist
+.pytest_cache
+.benchmarks
+.hypothesis
+__pycache__

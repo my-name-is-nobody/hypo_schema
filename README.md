@@ -1,5 +1,5 @@
 
-## Hyposchema fork by `remorses`
+## Hyposchema
 
 ```python
 
