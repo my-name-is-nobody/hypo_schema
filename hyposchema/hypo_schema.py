@@ -83,6 +83,10 @@ def gen_enum(prop):
     enum = prop["enum"]
     return hs.sampled_from(enum)
 
+def gen_const(prop):
+    const = prop["const"]
+    return hs.sampled_from([const])
+
 def gen_bool(prop):
     return hs.booleans()
 
@@ -92,6 +96,30 @@ def gen_one_of(prop):
         possible_values.append(get_generator(value))
 
     return hs.one_of(possible_values)
+
+def gen_any_of(prop):
+    possible_values = []
+    for value in prop["anyOf"]:
+        possible_values.append(get_generator(value))
+
+    return hs.one_of(possible_values)
+
+def gen_all_of(prop):
+    dicts = prop["allOf"]
+    if not all([d['type'] == 'object' for d in dicts]):
+        raise Exception('allOf is supported as array of object types')
+    result = {
+        'additionalProperties': True,
+        'required': [],
+        'properties': {},
+    }
+    for obj in dicts:
+        result['additionalProperties'] = result['additionalProperties'] and bool(obj.get('additionalProperties', True))
+        result['properties'] = {**result['properties'], **(obj.get('properties', {}) or {})}
+        result['required'] = result['required'] + (obj.get('required', [])  or [])
+    result['required'] = list(set(result['required']))
+    return gen_object(result)
+
 
 
 
@@ -103,6 +131,8 @@ def get_generator(prop):
             "object": gen_object,
             "array": gen_array,
     }
+    if not prop:
+        return gen_anything()
 
     enum = prop.get("enum", None)
     if enum is not None:
@@ -111,6 +141,14 @@ def get_generator(prop):
     one_of = prop.get("oneOf", None)
     if one_of is not None:
         return gen_one_of(prop)
+
+    any_of = prop.get("anyOf", None)
+    if any_of is not None:
+        return gen_any_of(prop)
+
+    all_of = prop.get("allOf", None)
+    if all_of is not None:
+        return gen_all_of(prop)
 
     json_type = prop.get("type", None)
     if json_type is None:

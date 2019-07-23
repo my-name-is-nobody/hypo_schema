@@ -27,7 +27,7 @@ import string
 from itertools import chain
 
 import hypothesis.strategies as strats
-from hypothesis.strategies import defines_strategy
+from hypothesis._strategies import defines_strategy
 from hypothesis.searchstrategy import SearchStrategy
 from hypothesis.internal.compat import hunichr, hrange
 

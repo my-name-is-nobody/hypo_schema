@@ -1,7 +1,7 @@
 import unittest
 
 from jsonschema import validate
-
+import json
 from hypothesis import given, settings
 from hyposchema.hypo_schema import generate_from_schema
 
@@ -10,11 +10,14 @@ EXAMPLE_JSON_SCHEMA= {
     "title": "Example Schema",
     "type": "object",
     "properties": {
-        "firstName": {
-            "type": "string"
-        },
-                "lastName": {
+                "firstName": {
                     "type": "string"
+                },
+                "lastName": {
+                    'anyOf': [
+                        {"type": "string"},
+                        {'type': 'number'}
+                    ]
                 },
                 "age": {
                     "description": "Age in years",
@@ -50,18 +53,11 @@ EXAMPLE_JSON_SCHEMA= {
 }
 
 
-class TestJsonSchema(unittest.TestCase):
-
-    def setUp(self):
-        self.maxDiff = None
 
 
-    @given(generate_from_schema(EXAMPLE_JSON_SCHEMA))
-    @settings(max_examples=500)
-    def test_basic_map(self, example_data):
+@given(generate_from_schema(EXAMPLE_JSON_SCHEMA))
+@settings(max_examples=10)
+def test_basic_map( example_data):
+    print(json.dumps(example_data, indent=4))
+    validate(example_data, EXAMPLE_JSON_SCHEMA)
 
-
-#        example_data = generate_from_schema(example_json_schema).example()
-#        pprint(example_data)
-
-        validate(example_data, EXAMPLE_JSON_SCHEMA)
