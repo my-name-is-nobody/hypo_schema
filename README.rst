@@ -2,6 +2,7 @@
 ## Hyposchema fork by `remorses`
 
 ```python
+
 from jsonschema import validate
 import json
 from hypothesis import given, settings
@@ -63,8 +64,10 @@ def test_basic_map(example_data):
 test_basic_map()
 
 ```
+
 Better using a simpler schema than json-schema, like `skema`:
-```
+
+```python
 
 import skema
 from jsonschema import validate
@@ -96,4 +99,6 @@ EventB:
 def test_basic_map( example_data):
     print(json.dumps(example_data, indent=4))
     validate(example_data, EXAMPLE_JSON_SCHEMA)
+
+test_basic_map()
 ```
