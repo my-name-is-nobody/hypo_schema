@@ -138,6 +138,10 @@ def get_generator(prop):
     if enum is not None:
         return gen_enum(prop)
 
+    const = prop.get("const", None)
+    if const is not None:
+        return gen_const(prop)
+
     one_of = prop.get("oneOf", None)
     if one_of is not None:
         return gen_one_of(prop)
