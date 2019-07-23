@@ -1,3 +1,8 @@
 [
-  "tests/skema/test_complex.py::test_basic_map"
+  "tests/test_allOf.py::test_basic_map",
+  "tests/test_anyOf.py::test_basic_map",
+  "tests/test_basic.py::test_basic_map",
+  "tests/test_empty.py::test_basic_map",
+  "tests/skema/test_complex.py::test_basic_map",
+  "tests/skema/test_simple.py::test_basic_map"
 ]
